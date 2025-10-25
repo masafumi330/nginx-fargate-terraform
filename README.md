@@ -39,6 +39,18 @@ nginx-fargate-terraform/
    └─ deployment.md
 ```
 
+## アプリケーション (app/) の基本
+- `app/Dockerfile`: 公式 `nginx:alpine` をベースに静的ファイルをデプロイ。`Hello, nginx!` を返すシンプルな HTML を配置。
+- `app/html/index.html`: Fargate で配信される静的ページ。ブランド確認用の簡易スタイルを付与。
+- `app/.dockerignore`: `.git` や不要ファイルをビルドコンテキストに含めないためのフィルター。
+
+ローカルでのビルド／起動例:
+```bash
+docker build -t hello-nginx ./app
+docker run --rm -p 8080:80 hello-nginx
+# http://localhost:8080 → "Hello, nginx!" と表示されれば OK
+```
+
 ## デプロイ戦略
 1. `app/` で Docker イメージをビルドし、ECR へプッシュ。
 2. Terraform で `infra/` を `terraform init/plan/apply` し、VPC/ALB/ECS/ECR などを一括デプロイ。
