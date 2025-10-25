@@ -32,3 +32,23 @@ output "ecr_repository_arn" {
   description = "ARN of the application ECR repository"
   value       = aws_ecr_repository.app.arn
 }
+
+output "ecs_cluster_id" {
+  description = "ECS cluster ID"
+  value       = aws_ecs_cluster.main.id
+}
+
+output "ecs_service_name" {
+  description = "ECS service name"
+  value       = aws_ecs_service.app.name
+}
+
+output "alb_dns_name" {
+  description = "Application Load Balancer DNS name"
+  value       = aws_lb.app.dns_name
+}
+
+output "alb_target_group_arn" {
+  description = "Target group ARN for ECS service"
+  value       = aws_lb_target_group.app.arn
+}

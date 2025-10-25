@@ -98,3 +98,45 @@ variable "ecr_lifecycle_keep_count" {
     error_message = "ecr_lifecycle_keep_count は 1 以上を指定してください。"
   }
 }
+
+variable "container_image_tag" {
+  description = "ECS タスクで使用するコンテナイメージタグ"
+  type        = string
+  default     = "latest"
+}
+
+variable "container_port" {
+  description = "nginx コンテナのリッスンポート"
+  type        = number
+  default     = 80
+}
+
+variable "health_check_path" {
+  description = "ALB からのヘルスチェックパス"
+  type        = string
+  default     = "/"
+}
+
+variable "ecs_task_cpu" {
+  description = "Fargate タスク定義の CPU (単位: vCPU * 1024)"
+  type        = string
+  default     = "256"
+}
+
+variable "ecs_task_memory" {
+  description = "Fargate タスク定義のメモリ (MB)"
+  type        = string
+  default     = "512"
+}
+
+variable "ecs_desired_count" {
+  description = "ECS サービスで維持するタスク数"
+  type        = number
+  default     = 1
+}
+
+variable "log_retention_in_days" {
+  description = "CloudWatch Logs の保持日数"
+  type        = number
+  default     = 14
+}
