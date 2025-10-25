@@ -74,9 +74,28 @@ docker run --rm -p 8080:80 hello-nginx
 ```
 
 ## デプロイ戦略
-1. `app/` で Docker イメージをビルドし、ECR へプッシュ。
-2. Terraform で `infra/` を `terraform init/plan/apply` し、VPC/ALB/ECS/ECR などを一括デプロイ。
-3. 変更が入った場合は CI/CD (GitHub Actions 等想定) で Docker ビルド→ECR プッシュ→Terraform Plan/Apply を自動化。
-4. 本番相当では Terraform Workspace や環境別変数を活用し、ステージング/本番を切り替え。
+### 初回
+1. Docker image push先となるECR repositoryを作成 `$ terraform apply -target=aws_ecr_repository.app`
+2. Login ECR, Build/tagged/Push Docker image
 
-今後、モジュール分割や CI パイプラインの実装を進めつつ、最小構成を段階的に拡張します。
+```bash
+$ aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <accountID>.dkr.ecr.<region>.amazonaws.com
+$ docker build -t app .
+$ docker tag app:latest <accountID>.dkr.ecr.<region>.amazonaws.com/todo:latest
+$ docker push <accountID>.dkr.ecr.<region>.amazonaws.com/todo:latest
+```
+
+3. Create all resources `$ terraform apply`
+
+### 以降
+1. Update source code
+2. Push to "main" branch
+3. Trigger GitHub Actions and action below
+  - Login ECR
+  - Build/tagged/Push to ECR
+  - Update task definition for new image ID
+  - Rolling Update Deploy ECS task definition
+
+発展: Rolling Update -> Blue/Green Deploy
+参考
+- [GitHub Actionsを使用したECSへのBlue/Greenデプロイ](https://dev.classmethod.jp/articles/github-actions-ecs-blue-green/)
