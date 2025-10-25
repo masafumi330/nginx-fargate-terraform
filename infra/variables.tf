@@ -132,7 +132,12 @@ variable "ecs_task_memory" {
 variable "ecs_desired_count" {
   description = "ECS サービスで維持するタスク数"
   type        = number
-  default     = 1
+  default     = 2
+
+  validation {
+    condition     = var.ecs_desired_count >= length(var.azs)
+    error_message = "ecs_desired_count は利用する AZ 数以上を指定してください。"
+  }
 }
 
 variable "log_retention_in_days" {

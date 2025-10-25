@@ -59,7 +59,7 @@ nginx-fargate-terraform/
 - Fargate タスク定義は `cpu=256 / memory=512` の軽量設定、CloudWatch Logs `/ecs/<project>` に吐き出す。
 - IAM の execution/task role を Terraform で管理し、ECR Pull + Logs 出力に最小権限を付与。
 - Application Load Balancer + Target Group を作成し、Private Subnet の Fargate タスクを IP ターゲットとして登録。
-- `aws_ecs_service` は Private Subnet で `desired_count=1`、ALB と連携してローリング更新。変数でポート/ヘルスチェックパス/タスク数を調整可能。
+- `aws_ecs_service` は Private Subnet で `desired_count>=AZ 数` を維持し、`spread` placement で AZ ごとにタスクを分散。変数でポート/ヘルスチェックパス/タスク数を調整可能。
 
 ## アプリケーション (app/) の基本
 - `app/Dockerfile`: 公式 `nginx:alpine` をベースに静的ファイルをデプロイ。`Hello, nginx!` を返すシンプルな HTML を配置。
