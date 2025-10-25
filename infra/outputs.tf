@@ -22,3 +22,13 @@ output "ecs_security_group_id" {
   description = "Security group used by ECS services"
   value       = aws_security_group.ecs.id
 }
+
+output "ecr_repository_url" {
+  description = "URL of the application ECR repository"
+  value       = aws_ecr_repository.app.repository_url
+}
+
+output "ecr_repository_arn" {
+  description = "ARN of the application ECR repository"
+  value       = aws_ecr_repository.app.arn
+}

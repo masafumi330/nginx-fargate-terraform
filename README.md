@@ -43,9 +43,16 @@ nginx-fargate-terraform/
 - VPC は `10.10.0.0/20` を確保し、DNS サービスを有効化。
 - AZ は `ap-northeast-1a` / `1c` を使用し、Public/Private 各 `/24` を割り当て。
 - Public Subnet は Internet Gateway + Route Table で 0.0.0.0/0 を公開し、ALB を配置予定。
-- Private Subnet は Fargate タスク用。ルートはローカルのみ。
+- Private Subnet は Fargate タスク用。ルートはローカルのみ (学習用のため NAT 無しスタート)。
 - Security Group は `alb_sg` (80番のみ) と `ecs_sg` (alb_sg からの 80番) に分離。
 - `variables.tf` で CIDR や AZ をパラメータ化し、タグは `locals.common_tags` で統一管理。
+
+## コンテナレジストリ (infra/ecr.tf)
+- `aws_ecr_repository` で `project_name` ベースのリポジトリを作成。タグは `IMMUTABLE` で誤上書きを防止。
+- Push 時の脆弱性スキャンを有効化 (`scan_on_push = true`)。
+- ライフサイクルポリシーで最新 5 イメージのみ保持し、ストレージコストを抑制。
+- `ecr_force_delete` 変数で削除挙動 (force) を制御し、環境に応じた安全性を確保。
+- `outputs.tf` からリポジトリ URL / ARN をエクスポートし、CI/CD や Terraform 他リソースで参照。
 
 ## アプリケーション (app/) の基本
 - `app/Dockerfile`: 公式 `nginx:alpine` をベースに静的ファイルをデプロイ。`Hello, nginx!` を返すシンプルな HTML を配置。

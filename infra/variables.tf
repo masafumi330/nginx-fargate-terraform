@@ -58,3 +58,43 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "ecr_repository_name" {
+  description = "ECR リポジトリ名。未指定の場合は project_name を使用"
+  type        = string
+  default     = null
+}
+
+variable "ecr_image_tag_mutability" {
+  description = "ECR イメージタグの変更可否 (MUTABLE / IMMUTABLE)"
+  type        = string
+  default     = "IMMUTABLE"
+
+  validation {
+    condition     = contains(["MUTABLE", "IMMUTABLE"], var.ecr_image_tag_mutability)
+    error_message = "ecr_image_tag_mutability は MUTABLE か IMMUTABLE を指定してください。"
+  }
+}
+
+variable "ecr_scan_on_push" {
+  description = "ECR へ push されたイメージのスキャンを有効化するか"
+  type        = bool
+  default     = true
+}
+
+variable "ecr_force_delete" {
+  description = "ECR リポジトリ削除時に未削除イメージがあっても削除するか"
+  type        = bool
+  default     = false
+}
+
+variable "ecr_lifecycle_keep_count" {
+  description = "ライフサイクルポリシーで保持する最新イメージ数"
+  type        = number
+  default     = 5
+
+  validation {
+    condition     = var.ecr_lifecycle_keep_count > 0
+    error_message = "ecr_lifecycle_keep_count は 1 以上を指定してください。"
+  }
+}
