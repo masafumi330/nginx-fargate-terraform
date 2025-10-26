@@ -85,7 +85,7 @@ variable "ecr_scan_on_push" {
 variable "ecr_force_delete" {
   description = "ECR リポジトリ削除時に未削除イメージがあっても削除するか"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "ecr_lifecycle_keep_count" {

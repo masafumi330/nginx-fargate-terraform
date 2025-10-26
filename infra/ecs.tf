@@ -159,11 +159,6 @@ resource "aws_ecs_service" "app" {
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 200
 
-  ordered_placement_strategy {
-    type  = "spread"
-    field = "attribute:ecs.availability-zone"
-  }
-
   network_configuration {
     subnets          = values(aws_subnet.private)[*].id
     security_groups  = [aws_security_group.ecs.id]
