@@ -1,13 +1,10 @@
 name: ECS deploy
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-  # pull_request:
-  #   branches:
-  #     - main
-  #   types: [closed]
+    types: [closed]
 
 env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
