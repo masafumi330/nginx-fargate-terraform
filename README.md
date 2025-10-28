@@ -81,8 +81,8 @@ docker run --rm -p 8080:80 hello-nginx
 ```bash
 $ aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <accountID>.dkr.ecr.<region>.amazonaws.com
 $ docker build -t app .
-$ docker tag app:latest <accountID>.dkr.ecr.<region>.amazonaws.com/todo:latest
-$ docker push <accountID>.dkr.ecr.<region>.amazonaws.com/todo:latest
+$ docker tag app:latest <accountID>.dkr.ecr.<region>.amazonaws.com/nginx-fargate-terraform:latest
+$ docker push <accountID>.dkr.ecr.<region>.amazonaws.com/nginx-fargate-terraform:latest
 ```
 
 3. Create all resources `$ terraform apply`
