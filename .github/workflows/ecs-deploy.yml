@@ -23,7 +23,7 @@ jobs:
       contents: read
     defaults:
       run:
-        working-directory: ./app
+        working-directory: ./
     steps:
       - uses: actions/checkout@v4
 
@@ -43,6 +43,7 @@ jobs:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: "nginx-fargate-terraform"
           IMAGE_TAG: ${{ github.sha }}
+        working-directory: ./app
         run: |
           docker build . --tag ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
           docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY }}:${{ env.IMAGE_TAG }}
