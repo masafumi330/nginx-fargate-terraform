@@ -11,6 +11,7 @@ on:
 
 env:
   AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  CONTAINER_NAME: "nginx"
   TASK_DEF: "nginx-fargate-terraform-task"
   ECS_SERVICE: "nginx-fargate-terraform-service"
   ECS_CLUSTER: "nginx-fargate-terraform-cluster"
@@ -58,7 +59,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task-definition.json
-          container-name: ${{ env.TASK_DEF }}
+          container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
 
       - name: Deploy Amazon ECS task definition
